@@ -8,9 +8,17 @@
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.0
-      - key: HUBSPOT_ACCESS_TOKEN
-        sync: false
       - key: DATABASE_URL
+        fromDatabase:
+          name: noshow_db
+          property: connectionString
+      - key: HUBSPOT_ACCESS_TOKEN
         sync: false
       - key: SECRET_KEY
         generateValue: true
+
+databases:
+  - name: noshow_db
+    databaseName: noshow_prediction
+    user: noshow_user
+    plan: free
