@@ -1,14 +1,16 @@
-services:
+﻿services:
   - type: web
-    name: noshow-api
+    name: noshow-prediction-api
     runtime: python
     plan: free
-    buildCommand: |
-      pip install --upgrade pip
-      pip install -r requirements.txt
+    buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
       - key: PYTHON_VERSION
-        value: "3.11.0"
-      - key: PIP_VERSION
-        value: "23.0.0"
+        value: 3.11.0
+      - key: HUBSPOT_ACCESS_TOKEN
+        sync: false
+      - key: DATABASE_URL
+        sync: false
+      - key: SECRET_KEY
+        generateValue: true

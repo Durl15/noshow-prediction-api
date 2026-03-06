@@ -1,0 +1,77 @@
+{% extends "base.html" %}
+
+{% block title %}Prediction Result{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <!-- Result Card -->
+        <div class="card mb-4">
+            <div class="card-header" style="background: linear-gradient(135deg, {% if color == 'danger' %}#dc2626{% elif color == 'warning' %}#d97706{% else %}#16a34a{% endif %} 0%, {% if color == 'danger' %}#991b1b{% elif color == 'warning' %}#92400e{% else %}#065f46{% endif %} 100%); color: white;">
+                <h4 class="mb-0">🔮 Prediction Result</h4>
+            </div>
+            <div class="card-body p-4 text-center">
+                <!-- Risk Score Circle -->
+                <div style="width: 200px; height: 200px; border-radius: 50%; border: 12px solid {% if color == 'danger' %}#fee2e2{% elif color == 'warning' %}#fef3c7{% else %}#d1fae5{% endif %}; border-top-color: {% if color == 'danger' %}#dc2626{% elif color == 'warning' %}#d97706{% else %}#16a34a{% endif %}; display: flex; align-items: center; justify-content: center; margin: 0 auto 2rem;">
+                    <div>
+                        <div style="font-size: 3.5rem; font-weight: 700; color: {% if color == 'danger' %}#dc2626{% elif color == 'warning' %}#d97706{% else %}#16a34a{% endif %};">{{ risk_score }}%</div>
+                        <div style="font-size: 0.875rem; color: #6b7280;">No-Show Risk</div>
+                    </div>
+                </div>
+                
+                <!-- Risk Level Badge -->
+                <div class="mb-4">
+                    {% if color == 'danger' %}
+                    <span class="risk-high" style="font-size: 1.25rem; padding: 0.5rem 1.5rem;">{{ risk_level }}</span>
+                    {% elif color == 'warning' %}
+                    <span class="risk-medium" style="font-size: 1.25rem; padding: 0.5rem 1.5rem;">{{ risk_level }}</span>
+                    {% else %}
+                    <span class="risk-low" style="font-size: 1.25rem; padding: 0.5rem 1.5rem;">{{ risk_level }}</span>
+                    {% endif %}
+                </div>
+                
+                <!-- Patient Info -->
+                <div class="row text-start mb-4">
+                    <div class="col-md-6">
+                        <p class="mb-1"><strong>Patient:</strong> {{ patient_name }}</p>
+                        <p class="mb-1"><strong>ID:</strong> {{ patient_id }}</p>
+                    </div>
+                    <div class="col-md-6">
+                        <p class="mb-1"><strong>Department:</strong> {{ department }}</p>
+                        <p class="mb-1"><strong>Date:</strong> {{ appointment_date }}</p>
+                    </div>
+                </div>
+                
+                <!-- Recommendation -->
+                <div class="alert alert-primary" style="background: rgba(30, 58, 138, 0.1); border-left: 4px solid var(--djai-primary); color: var(--djai-primary); padding: 1rem; border-radius: 0.5rem; text-align: left;">
+                    <strong>💡 Recommendation:</strong> {{ recommendation }}
+                </div>
+            </div>
+        </div>
+        
+        <!-- Factors Card -->
+        <div class="card mb-4">
+            <div class="card-header">
+                <span>📊 Factors Considered</span>
+            </div>
+            <div class="card-body">
+                <ul class="list-group list-group-flush">
+                    {% for factor in factors %}
+                    <li class="list-group-item d-flex align-items-center">
+                        <span class="me-2" style="color: var(--djai-secondary);">✓</span>
+                        {{ factor }}
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        
+        <!-- Action Buttons -->
+        <div class="d-grid gap-2 d-md-flex justify-content-md-center">
+            <a href="/predict" class="btn btn-outline-secondary btn-lg">New Prediction</a>
+            <button class="btn btn-primary btn-lg">Schedule Outreach</button>
+            <a href="/" class="btn btn-secondary btn-lg">Back to Dashboard</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

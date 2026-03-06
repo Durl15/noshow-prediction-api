@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>No-Show Prediction</title>
+    <style>
+        body { font-family: Arial, sans-serif; max-width: 600px; margin: 50px auto; padding: 20px; background: #f5f5f5; }
+        .card { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
+        h1 { color: #333; text-align: center; }
+        input, select, button { width: 100%; padding: 10px; margin: 10px 0; border: 1px solid #ddd; border-radius: 5px; }
+        button { background: #667eea; color: white; border: none; cursor: pointer; font-size: 16px; }
+        button:hover { background: #5568d3; }
+        #result { margin-top: 20px; padding: 20px; border-radius: 5px; display: none; }
+        .high { background: #fee; border-left: 4px solid #e74c3c; }
+        .medium { background: #fff3cd; border-left: 4px solid #f39c12; }
+        .low { background: #d4edda; border-left: 4px solid #27ae60; }
+    </style>
+</head>
+<body>
+    <div class="card">
+        <h1>?? No-Show Predictor</h1>
+        
+        <input type="email" id="email" placeholder="Email" value="test@example.com">
+        <input type="date" id="date" value="2026-03-15">
+        <input type="number" id="value" placeholder="Value ($)" value="200">
+        <select id="newPatient">
+            <option value="false">Returning Patient</option>
+            <option value="true">New Patient</option>
+        </select>
+        <input type="number" id="noShows" placeholder="Previous No-Shows" value="2" min="0">
+        <input type="number" id="leadTime" placeholder="Lead Time (days)" value="20" min="1">
+        
+        <button onclick="predict()">Predict Risk</button>
+        
+        <div id="result"></div>
+    </div>
+
+    <script>
+        const API_URL = 'https://noshow-prediction-api.onrender.com';
+        
+        async function predict() {
+            const btn = document.querySelector('button');
+            btn.textContent = 'Loading...';
+            btn.disabled = true;
+            
+            const data = {
+                contact_email: document.getElementById('email').value,
+                appointment_date: document.getElementById('date').value,
+                appointment_value: parseFloat(document.getElementById('value').value),
+                is_new_patient: document.getElementById('newPatient').value === 'true',
+                previous_no_shows: parseInt(document.getElementById('noShows').value),
+                lead_time_days: parseInt(document.getElementById('leadTime').value),
+                days_since_scheduled: 1
+            };
+            
+            try {
+                const response = await fetch(API_URL + '/predict', {
+                    method: 'POST',
+                    headers: {'Content-Type': 'application/json'},
+                    body: JSON.stringify(data)
+                });
+                
+                const result = await response.json();
+                
+                const div = document.getElementById('result');
+                div.className = result.risk_level.toLowerCase();
+                div.innerHTML = `
+                    <h3>Risk Level: ${result.risk_level}</h3>
+                    <p><strong>Probability:</strong> ${result.no_show_probability}%</p>
+                    <p><strong>Revenue at Risk:</strong> $${result.revenue_at_risk}</p>
+                `;
+                div.style.display = 'block';
+                
+            } catch (err) {
+                alert('Error: ' + err.message);
+            }
+            
+            btn.textContent = 'Predict Risk';
+            btn.disabled = false;
+        }
+    </script>
+</body>
+</html>
