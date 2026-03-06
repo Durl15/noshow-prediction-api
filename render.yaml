@@ -1,11 +1,10 @@
 services:
   - type: web
-    name: noshow-prediction-api
+    name: noshow-api
     runtime: python
+    plan: free
     buildCommand: pip install -r requirements.txt
     startCommand: uvicorn main:app --host 0.0.0.0 --port $PORT
     envVars:
-      - key: HUBSPOT_ACCESS_TOKEN
-        sync: false  # You'll set this in Render dashboard
       - key: PYTHON_VERSION
         value: 3.11.0
