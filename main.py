@@ -2,17 +2,16 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
-from typing import Optional
 
-app = FastAPI(title="No-Show Prediction API", version="2.0.0")
+app = FastAPI()
 
-# Add CORS middleware to allow browser requests
+# Add CORS
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],  # Allows all origins
+    allow_origins=["*"],
     allow_credentials=True,
-    allow_methods=["*"],  # Allows all methods
-    allow_headers=["*"],  # Allows all headers
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 class PredictionRequest(BaseModel):
@@ -38,32 +37,21 @@ def predict(request: PredictionRequest):
     if request.lead_time_days > 14:
         prob += 0.1
     
-    try:
-        from datetime import datetime
-        day = datetime.strptime(request.appointment_date, "%Y-%m-%d").weekday()
-        if day >= 5:
-            prob += 0.1
-    except:
-        pass
-    
     prob = min(prob, 0.95)
     
     if prob >= 0.5:
         risk = "HIGH"
-        rec = "URGENT: Call to confirm + offer reschedule"
     elif prob >= 0.3:
         risk = "MEDIUM"
-        rec = "Send SMS reminder 24hrs + email 48hrs before"
     else:
         risk = "LOW"
-        rec = "Standard email reminder"
     
     return {
         "contact_email": request.contact_email,
         "no_show_probability": round(prob * 100, 1),
         "risk_level": risk,
         "revenue_at_risk": round(request.appointment_value * prob, 2),
-        "recommendation": rec
+        "recommendation": "Standard reminder"
     }
 
 if __name__ == "__main__":
