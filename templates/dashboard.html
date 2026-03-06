@@ -1,0 +1,203 @@
+{% extends "base.html" %}
+
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+<!-- Hero Section -->
+<div class="hero mb-4">
+    <div class="container">
+        <div class="row align-items-center">
+            <div class="col-lg-8">
+                <h1>AI-Powered No-Show Prediction</h1>
+                <p class="lead">Reduce missed appointments by up to 35% with machine learning</p>
+                <a href="/predict" class="btn btn-secondary btn-lg">Make Prediction</a>
+            </div>
+            <div class="col-lg-4 text-center">
+                <div style="width: 150px; height: 150px; border-radius: 50%; border: 8px solid rgba(255,255,255,0.2); border-top-color: #d4af37; display: flex; align-items: center; justify-content: center; margin: 0 auto;">
+                    <span style="font-size: 2.5rem; font-weight: 700; color: #d4af37;">85%</span>
+                </div>
+                <p class="mt-3 mb-0" style="opacity: 0.9;">Accuracy Rate</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Stats Row -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card primary">
+            <div class="stat-number">{{ total_predictions }}</div>
+            <div class="stat-label">Total Predictions</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card">
+            <div class="stat-number" style="color: var(--djai-secondary);">{{ high_risk }}</div>
+            <div class="stat-label">High Risk</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="border-left-color: #10b981;">
+            <div class="stat-number" style="color: #10b981;">{{ accuracy }}%</div>
+            <div class="stat-label">Reduction</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card" style="border-left-color: #f59e0b;">
+            <div class="stat-number" style="color: #f59e0b;">${{ revenue_saved }}</div>
+            <div class="stat-label">Revenue Saved</div>
+        </div>
+    </div>
+</div>
+
+<!-- Alert -->
+<div class="alert alert-primary d-flex align-items-center" role="alert" style="background: rgba(30, 58, 138, 0.1); border-left: 4px solid var(--djai-primary); color: var(--djai-primary); padding: 1rem; border-radius: 0.5rem;">
+    <span class="me-2">💡</span>
+    <div>High-risk patients detected for tomorrow's schedule. <a href="/patients" style="color: var(--djai-primary); font-weight: 600;">View recommendations</a></div>
+</div>
+
+<!-- Recent Predictions Table -->
+<div class="card">
+    <div class="card-header d-flex justify-content-between align-items-center">
+        <span>Recent Predictions</span>
+        <a href="/predict" class="btn btn-sm btn-secondary">+ New Prediction</a>
+    </div>
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Patient</th>
+                        <th>Date</th>
+                        <th>Department</th>
+                        <th>Risk Score</th>
+                        <th>Status</th>
+                        <th>Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>
+                            <strong>John Smith</strong><br>
+                            <small class="text-muted">ID: #4521</small>
+                        </td>
+                        <td>Mar 7, 2026</td>
+                        <td>Cardiology</td>
+                        <td><span class="badge bg-danger">87%</span></td>
+                        <td><span class="risk-high">High Risk</span></td>
+                        <td><button class="btn btn-sm btn-primary">Contact</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Sarah Johnson</strong><br>
+                            <small class="text-muted">ID: #4522</small>
+                        </td>
+                        <td>Mar 7, 2026</td>
+                        <td>Orthopedics</td>
+                        <td><span class="badge bg-warning text-dark">62%</span></td>
+                        <td><span class="risk-medium">Medium</span></td>
+                        <td><button class="btn btn-sm btn-primary">Contact</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Mike Davis</strong><br>
+                            <small class="text-muted">ID: #4523</small>
+                        </td>
+                        <td>Mar 8, 2026</td>
+                        <td>Primary Care</td>
+                        <td><span class="badge bg-success">23%</span></td>
+                        <td><span class="risk-low">Low Risk</span></td>
+                        <td><button class="btn btn-sm btn-outline-secondary">Monitor</button></td>
+                    </tr>
+                    <tr>
+                        <td>
+                            <strong>Emma Wilson</strong><br>
+                            <small class="text-muted">ID: #4524</small>
+                        </td>
+                        <td>Mar 8, 2026</td>
+                        <td>Dermatology</td>
+                        <td><span class="badge bg-danger">91%</span></td>
+                        <td><span class="risk-high">High Risk</span></td>
+                        <td><button class="btn btn-sm btn-primary">Contact</button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Two Column Layout -->
+<div class="row mt-4">
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header" style="background: linear-gradient(135deg, #d4af37 0%, #f0d878 100%); color: #0f172a;">
+                <span>⚡ Quick Prediction</span>
+            </div>
+            <div class="card-body">
+                <form action="/predict" method="post">
+                    <div class="mb-3">
+                        <label class="form-label">Patient Age</label>
+                        <input type="number" class="form-control" name="age" placeholder="Enter age" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Lead Time (days)</label>
+                        <input type="number" class="form-control" name="lead_time" placeholder="Days until appointment" required>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Department</label>
+                        <select class="form-select" name="department" required>
+                            <option value="">Select department...</option>
+                            <option value="primary">Primary Care</option>
+                            <option value="cardiology">Cardiology</option>
+                            <option value="orthopedics">Orthopedics</option>
+                            <option value="dermatology">Dermatology</option>
+                        </select>
+                    </div>
+                    <button type="submit" class="btn btn-primary w-100">Generate Prediction</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="card h-100">
+            <div class="card-header">
+                <span>📊 Model Performance</span>
+            </div>
+            <div class="card-body">
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Accuracy</span>
+                        <strong>85.2%</strong>
+                    </div>
+                    <div class="progress" style="height: 8px; background: #e5e7eb; border-radius: 4px;">
+                        <div class="progress-bar" style="width: 85%; background: linear-gradient(90deg, #1e3a8a 0%, #d4af37 100%); height: 100%; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Precision</span>
+                        <strong>82.4%</strong>
+                    </div>
+                    <div class="progress" style="height: 8px; background: #e5e7eb; border-radius: 4px;">
+                        <div class="progress-bar" style="width: 82%; background: linear-gradient(90deg, #1e3a8a 0%, #d4af37 100%); height: 100%; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                <div class="mb-3">
+                    <div class="d-flex justify-content-between mb-1">
+                        <span>Recall</span>
+                        <strong>88.1%</strong>
+                    </div>
+                    <div class="progress" style="height: 8px; background: #e5e7eb; border-radius: 4px;">
+                        <div class="progress-bar" style="width: 88%; background: linear-gradient(90deg, #1e3a8a 0%, #d4af37 100%); height: 100%; border-radius: 4px;"></div>
+                    </div>
+                </div>
+                <hr>
+                <div class="text-center">
+                    <small class="text-muted">Last trained: 2 days ago</small><br>
+                    <button class="btn btn-sm btn-secondary mt-2">Retrain Model</button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

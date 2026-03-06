@@ -1,65 +1,31 @@
+﻿from fastapi import FastAPI, Request, Form
+from fastapi.staticfiles import StaticFiles
+from fastapi.templating import Jinja2Templates
+from fastapi.responses import HTMLResponse, JSONResponse
 import os
-from fastapi import FastAPI
-from fastapi.middleware.cors import CORSMiddleware
-from pydantic import BaseModel
+import random
 
-app = FastAPI()
+app = FastAPI(title="No-Show Prediction API")
 
-# Configure CORS - must be before routes
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=["*"],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-    expose_headers=["*"]
-)
+# Mount static files
+app.mount("/static", StaticFiles(directory="static"), name="static")
 
-class PredictionRequest(BaseModel):
-    contact_email: str
-    appointment_date: str
-    appointment_value: float = 150.0
-    days_since_scheduled: int = 7
-    is_new_patient: bool = False
-    previous_no_shows: int = 0
-    lead_time_days: int = 14
+# Setup templates
+templates = Jinja2Templates(directory="templates")
 
-@app.get("/")
-def health_check():
+# Health check endpoint (REQUIRED for Render monitoring)
+@app.get("/health")
+async def health_check():
     return {"status": "healthy", "service": "No-Show Prediction API"}
 
-@app.options("/predict")
-def predict_options():
-    return {}
+# Root endpoint
+@app.get("/", response_class=HTMLResponse)
+async def root(request: Request):
+    return templates.TemplateResponse("index.html", {"request": request})
 
-@app.post("/predict")
-def predict(request: PredictionRequest):
-    prob = 0.2
-    if request.previous_no_shows > 0:
-        prob += request.previous_no_shows * 0.1
-    if request.is_new_patient:
-        prob += 0.15
-    if request.lead_time_days > 14:
-        prob += 0.1
-    
-    prob = min(prob, 0.95)
-    
-    if prob >= 0.5:
-        risk = "HIGH"
-    elif prob >= 0.3:
-        risk = "MEDIUM"
-    else:
-        risk = "LOW"
-    
-    return {
-        "contact_email": request.contact_email,
-        "no_show_probability": round(prob * 100, 1),
-        "risk_level": risk,
-        "revenue_at_risk": round(request.appointment_value * prob, 2),
-        "recommendation": "Standard reminder"
-    }
+# TODO: Add your other routes here (dashboard, predict, etc.)
 
 if __name__ == "__main__":
     import uvicorn
-    port = int(os.getenv("PORT", 8000))
+    port = int(os.environ.get("PORT", 8000))
     uvicorn.run(app, host="0.0.0.0", port=port)

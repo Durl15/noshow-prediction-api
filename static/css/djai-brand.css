@@ -1,0 +1,16 @@
+/* DJ AI Consulting Brand CSS */
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&display=swap');
+:root { --djai-primary: #1e3a8a; --djai-secondary: #d4af37; --djai-dark: #0f172a; --djai-light: #f3f4f6; --djai-gray: #6b7280; }
+body { font-family: 'Inter', sans-serif; background: var(--djai-light); color: var(--djai-dark); }
+.navbar { background: linear-gradient(135deg, var(--djai-primary) 0%, var(--djai-dark) 100%); }
+.navbar-brand { color: white !important; font-weight: 700; }
+.navbar-brand span { color: var(--djai-secondary); }
+.btn-primary { background: var(--djai-primary); border-color: var(--djai-primary); }
+.btn-secondary { background: var(--djai-secondary); border-color: var(--djai-secondary); color: var(--djai-dark); font-weight: 600; }
+.footer { background: var(--djai-dark); color: white; padding: 2rem 0; margin-top: 3rem; }
+.risk-high { background: #fee2e2; color: #dc2626; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600; display: inline-block; }
+.risk-medium { background: #fef3c7; color: #d97706; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600; display: inline-block; }
+.risk-low { background: #d1fae5; color: #16a34a; padding: 0.25rem 0.75rem; border-radius: 20px; font-weight: 600; display: inline-block; }
+.stat-card { background: white; border-left: 4px solid var(--djai-secondary); padding: 1.5rem; border-radius: 8px; box-shadow: 0 2px 8px rgba(0,0,0,0.08); }
+.stat-card.primary { border-left-color: var(--djai-primary); }
+.stat-number { font-size: 2.5rem; font-weight: 700; color: var(--djai-primary); }

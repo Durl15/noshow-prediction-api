@@ -1,0 +1,186 @@
+{% extends "base.html" %}
+
+{% block title %}Analytics{% endblock %}
+
+{% block content %}
+<h2 class="mb-4">Analytics Dashboard</h2>
+
+<!-- Stats Overview -->
+<div class="row g-4 mb-4">
+    <div class="col-md-3">
+        <div class="stat-card primary text-center">
+            <div class="stat-number">{{ total_predictions }}</div>
+            <div class="stat-label">Total Predictions</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center" style="border-left-color: #dc2626;">
+            <div class="stat-number" style="color: #dc2626;">{{ high_risk }}</div>
+            <div class="stat-label">High Risk</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center" style="border-left-color: #d97706;">
+            <div class="stat-number" style="color: #d97706;">{{ medium_risk }}</div>
+            <div class="stat-label">Medium Risk</div>
+        </div>
+    </div>
+    <div class="col-md-3">
+        <div class="stat-card text-center" style="border-left-color: #16a34a;">
+            <div class="stat-number" style="color: #16a34a;">{{ low_risk }}</div>
+            <div class="stat-label">Low Risk</div>
+        </div>
+    </div>
+</div>
+
+<!-- Model Performance -->
+<div class="row">
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-header">
+                <span>📈 Model Performance Metrics</span>
+            </div>
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-4 text-center mb-4">
+                        <div style="font-size: 3rem; font-weight: 700; color: var(--djai-primary);">{{ accuracy }}%</div>
+                        <div class="text-muted">Accuracy</div>
+                        <small class="text-success">↑ 2.3% from last month</small>
+                    </div>
+                    <div class="col-md-4 text-center mb-4">
+                        <div style="font-size: 3rem; font-weight: 700; color: var(--djai-secondary);">{{ precision }}%</div>
+                        <div class="text-muted">Precision</div>
+                        <small class="text-success">↑ 1.8% from last month</small>
+                    </div>
+                    <div class="col-md-4 text-center mb-4">
+                        <div style="font-size: 3rem; font-weight: 700; color: #10b981;">{{ recall }}%</div>
+                        <div class="text-muted">Recall</div>
+                        <small class="text-success">↑ 3.1% from last month</small>
+                    </div>
+                </div>
+                
+                <hr>
+                
+                <h6 class="mb-3">Performance Over Time</h6>
+                <div style="height: 200px; background: linear-gradient(135deg, rgba(30,58,138,0.1) 0%, rgba(212,175,55,0.1) 100%); border-radius: 8px; display: flex; align-items: center; justify-content: center; color: var(--djai-gray);">
+                    [Chart Placeholder - Accuracy trend over last 30 days]
+                </div>
+            </div>
+        </div>
+        
+        <!-- Department Breakdown -->
+        <div class="card">
+            <div class="card-header">
+                <span>🏥 Department Breakdown</span>
+            </div>
+            <div class="card-body">
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th>Department</th>
+                            <th>Total</th>
+                            <th>High Risk</th>
+                            <th>No-Show Rate</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Primary Care</td>
+                            <td>452</td>
+                            <td>89</td>
+                            <td>
+                                <div class="progress" style="height: 8px; width: 100px;">
+                                    <div class="progress-bar bg-danger" style="width: 18%;"></div>
+                                </div>
+                                <small>18%</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Cardiology</td>
+                            <td>234</td>
+                            <td>67</td>
+                            <td>
+                                <div class="progress" style="height: 8px; width: 100px;">
+                                    <div class="progress-bar bg-warning" style="width: 24%;"></div>
+                                </div>
+                                <small>24%</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Orthopedics</td>
+                            <td>189</td>
+                            <td>45</td>
+                            <td>
+                                <div class="progress" style="height: 8px; width: 100px;">
+                                    <div class="progress-bar bg-warning" style="width: 22%;"></div>
+                                </div>
+                                <small>22%</small>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td>Dermatology</td>
+                            <td>156</td>
+                            <td>78</td>
+                            <td>
+                                <div class="progress" style="height: 8px; width: 100px;">
+                                    <div class="progress-bar bg-danger" style="width: 28%;"></div>
+                                </div>
+                                <small>28%</small>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+    <div class="col-lg-4">
+        <!-- ROI Card -->
+        <div class="card mb-4" style="background: linear-gradient(135deg, var(--djai-primary) 0%, var(--djai-dark) 100%); color: white;">
+            <div class="card-body text-center">
+                <h5 class="mb-3">💰 ROI Impact</h5>
+                <div style="font-size: 2.5rem; font-weight: 700; color: var(--djai-secondary);">$45,000</div>
+                <p class="mb-0">Revenue saved this month</p>
+                <hr style="border-color: rgba(255,255,255,0.2);">
+                <div class="row">
+                    <div class="col-6">
+                        <div style="font-size: 1.5rem; font-weight: 600;">342</div>
+                        <small>No-shows prevented</small>
+                    </div>
+                    <div class="col-6">
+                        <div style="font-size: 1.5rem; font-weight: 600;">28%</div>
+                        <small>Reduction rate</small>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <!-- Recent Activity -->
+        <div class="card">
+            <div class="card-header">
+                <span>🕐 Recent Activity</span>
+            </div>
+            <div class="card-body">
+                <ul class="list-unstyled mb-0">
+                    <li class="mb-3 pb-3 border-bottom">
+                        <small class="text-muted">2 min ago</small>
+                        <p class="mb-0">New prediction for John Smith (87% risk)</p>
+                    </li>
+                    <li class="mb-3 pb-3 border-bottom">
+                        <small class="text-muted">15 min ago</small>
+                        <p class="mb-0">SMS reminder sent to Sarah Johnson</p>
+                    </li>
+                    <li class="mb-3 pb-3 border-bottom">
+                        <small class="text-muted">1 hour ago</small>
+                        <p class="mb-0">Model retrained with new data</p>
+                    </li>
+                    <li class="mb-0">
+                        <small class="text-muted">3 hours ago</small>
+                        <p class="mb-0">High-risk alert: 12 patients for tomorrow</p>
+                    </li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

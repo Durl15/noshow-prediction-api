@@ -1,0 +1,106 @@
+{% extends "base.html" %}
+
+{% block title %}Patients{% endblock %}
+
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h2>Patient List</h2>
+    <a href="/predict" class="btn btn-secondary">+ New Prediction</a>
+</div>
+
+<!-- Filters -->
+<div class="card mb-4">
+    <div class="card-body">
+        <div class="row g-3">
+            <div class="col-md-3">
+                <input type="text" class="form-control" placeholder="Search patients...">
+            </div>
+            <div class="col-md-2">
+                <select class="form-select">
+                    <option value="">All Risks</option>
+                    <option value="high">High Risk</option>
+                    <option value="medium">Medium Risk</option>
+                    <option value="low">Low Risk</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <select class="form-select">
+                    <option value="">All Departments</option>
+                    <option value="primary">Primary Care</option>
+                    <option value="cardiology">Cardiology</option>
+                    <option value="orthopedics">Orthopedics</option>
+                </select>
+            </div>
+            <div class="col-md-2">
+                <button class="btn btn-primary w-100">Filter</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Patients Table -->
+<div class="card">
+    <div class="card-body p-0">
+        <div class="table-responsive">
+            <table class="table table-hover mb-0">
+                <thead>
+                    <tr>
+                        <th>Patient ID</th>
+                        <th>Name</th>
+                        <th>Department</th>
+                        <th>Appointment Date</th>
+                        <th>Risk Score</th>
+                        <th>Status</th>
+                        <th>Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for patient in patients %}
+                    <tr>
+                        <td><code>{{ patient.id }}</code></td>
+                        <td><strong>{{ patient.name }}</strong></td>
+                        <td>{{ patient.department }}</td>
+                        <td>{{ patient.date }}</td>
+                        <td>
+                            <div class="d-flex align-items-center">
+                                <div class="progress flex-grow-1 me-2" style="height: 8px; width: 100px;">
+                                    <div class="progress-bar {% if patient.risk >= 70 %}bg-danger{% elif patient.risk >= 40 %}bg-warning{% else %}bg-success{% endif %}" 
+                                         style="width: {{ patient.risk }}%;"></div>
+                                </div>
+                                <span class="{% if patient.risk >= 70 %}text-danger{% elif patient.risk >= 40 %}text-warning{% else %}text-success{% endif %} fw-bold">
+                                    {{ patient.risk }}%
+                                </span>
+                            </div>
+                        </td>
+                        <td>
+                            {% if patient.status == "High Risk" %}
+                            <span class="risk-high">{{ patient.status }}</span>
+                            {% elif patient.status == "Medium" %}
+                            <span class="risk-medium">{{ patient.status }}</span>
+                            {% else %}
+                            <span class="risk-low">{{ patient.status }}</span>
+                            {% endif %}
+                        </td>
+                        <td>
+                            <button class="btn btn-sm btn-primary">Contact</button>
+                            <button class="btn btn-sm btn-outline-secondary">View</button>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+
+<!-- Pagination -->
+<nav class="mt-4">
+    <ul class="pagination justify-content-center">
+        <li class="page-item disabled"><a class="page-link" href="#">Previous</a></li>
+        <li class="page-item active"><a class="page-link" href="#" style="background-color: var(--djai-primary); border-color: var(--djai-primary);">1</a></li>
+        <li class="page-item"><a class="page-link" href="#">2</a></li>
+        <li class="page-item"><a class="page-link" href="#">3</a></li>
+        <li class="page-item"><a class="page-link" href="#">Next</a></li>
+    </ul>
+</nav>
+{% endblock %}

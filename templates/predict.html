@@ -1,0 +1,115 @@
+{% extends "base.html" %}
+
+{% block title %}New Prediction{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-lg-8">
+        <div class="card">
+            <div class="card-header" style="background: linear-gradient(135deg, #d4af37 0%, #f0d878 100%); color: #0f172a;">
+                <h4 class="mb-0">🔮 New No-Show Prediction</h4>
+            </div>
+            <div class="card-body p-4">
+                <form action="/predict" method="post">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Patient Name</label>
+                            <input type="text" class="form-control" name="patient_name" placeholder="Enter patient name" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Patient ID</label>
+                            <input type="text" class="form-control" name="patient_id" placeholder="e.g., #4525">
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Age</label>
+                            <input type="number" class="form-control" name="age" placeholder="Enter age" min="0" max="120" required>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Gender</label>
+                            <select class="form-select" name="gender" required>
+                                <option value="">Select...</option>
+                                <option value="male">Male</option>
+                                <option value="female">Female</option>
+                                <option value="other">Other</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Department</label>
+                            <select class="form-select" name="department" required>
+                                <option value="">Select department...</option>
+                                <option value="primary">Primary Care</option>
+                                <option value="cardiology">Cardiology</option>
+                                <option value="orthopedics">Orthopedics</option>
+                                <option value="dermatology">Dermatology</option>
+                                <option value="neurology">Neurology</option>
+                                <option value="oncology">Oncology</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Appointment Type</label>
+                            <select class="form-select" name="appointment_type" required>
+                                <option value="">Select type...</option>
+                                <option value="new">New Patient</option>
+                                <option value="followup">Follow-up</option>
+                                <option value="procedure">Procedure</option>
+                                <option value="consultation">Consultation</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Lead Time (days)</label>
+                            <input type="number" class="form-control" name="lead_time" placeholder="Days until appointment" min="0" max="365" required>
+                            <small class="text-muted">Days between scheduling and appointment</small>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Previous No-Shows</label>
+                            <input type="number" class="form-control" name="previous_noshows" placeholder="Count" min="0" max="50" value="0">
+                            <small class="text-muted">Patient's history of missed appointments</small>
+                        </div>
+                    </div>
+                    
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Distance (miles)</label>
+                            <input type="number" class="form-control" name="distance" placeholder="Miles from clinic" min="0" max="500" step="0.1">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label class="form-label">Insurance Type</label>
+                            <select class="form-select" name="insurance">
+                                <option value="">Select...</option>
+                                <option value="private">Private</option>
+                                <option value="medicare">Medicare</option>
+                                <option value="medicaid">Medicaid</option>
+                                <option value="selfpay">Self-Pay</option>
+                            </select>
+                        </div>
+                    </div>
+                    
+                    <hr class="my-4">
+                    
+                    <div class="d-grid gap-2 d-md-flex justify-content-md-end">
+                        <a href="/" class="btn btn-outline-secondary">Cancel</a>
+                        <button type="submit" class="btn btn-primary btn-lg">Generate Prediction</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+        
+        <!-- Info Card -->
+        <div class="card mt-4" style="background: rgba(30, 58, 138, 0.05); border-left: 4px solid var(--djai-primary);">
+            <div class="card-body">
+                <h6 style="color: var(--djai-primary);">💡 How It Works</h6>
+                <p class="mb-0 text-muted">Our AI model analyzes 50+ variables including patient demographics, appointment history, and scheduling patterns to predict no-show probability with 85%+ accuracy.</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
