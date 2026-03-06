@@ -5,13 +5,14 @@ from pydantic import BaseModel
 
 app = FastAPI()
 
-# Add CORS
+# Configure CORS - must be before routes
 app.add_middleware(
     CORSMiddleware,
     allow_origins=["*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
+    expose_headers=["*"]
 )
 
 class PredictionRequest(BaseModel):
@@ -26,6 +27,10 @@ class PredictionRequest(BaseModel):
 @app.get("/")
 def health_check():
     return {"status": "healthy", "service": "No-Show Prediction API"}
+
+@app.options("/predict")
+def predict_options():
+    return {}
 
 @app.post("/predict")
 def predict(request: PredictionRequest):
