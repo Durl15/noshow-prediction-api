@@ -1,11 +1,13 @@
-﻿from fastapi import APIRouter, HTTPException
+from fastapi import APIRouter, Depends, HTTPException
+
+from .auth import require_api_key
 from pydantic import BaseModel
 from typing import Optional
 import requests
 import os
 from datetime import datetime
 
-router = APIRouter(prefix="/hubspot", tags=["hubspot"])
+router = APIRouter(prefix="/hubspot", tags=["hubspot"], dependencies=[Depends(require_api_key)])
 
 HUBSPOT_API_KEY = os.getenv("HUBSPOT_API_KEY", "")
 BASE_URL = "https://api.hubapi.com"

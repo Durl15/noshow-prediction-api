@@ -1,7 +1,8 @@
-﻿from fastapi import APIRouter
+from fastapi import APIRouter, Depends
+from .auth import require_api_key
 from pydantic import BaseModel
 
-router = APIRouter(prefix="/roi", tags=["roi-calculator"])
+router = APIRouter(prefix="/roi", tags=["roi-calculator"], dependencies=[Depends(require_api_key)])
 
 class Metrics(BaseModel):
     total_appointments_monthly: int
